@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WordPress_Plugin_Template_Post_Type {
+class FFW_JSON_TO_AWS_POSTTYPE {
 	private $dir;
 	private $file;
 	private $assets_dir;
@@ -10,11 +10,11 @@ class WordPress_Plugin_Template_Post_Type {
 	private $token;
 
 	public function __construct( $file ) {
-		$this->dir = dirname( $file );
-		$this->file = $file;
+		$this->dir        = dirname( $file );
+		$this->file       = $file;
 		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $file ) ) );
-		$this->token = 'post_type';
+		$this->token      = 'post_type';
 
 		// Regsiter post type
 		add_action( 'init' , array( $this, 'register_post_type' ) );
@@ -42,109 +42,7 @@ class WordPress_Plugin_Template_Post_Type {
 
 	}
 
-	/**
-	 * Register new post type
-	 * @return void
-	 */
-	public function register_post_type() {
-
-		$labels = array(
-			'name' => _x( 'Post Type', 'post type general name' , 'plugin_textdomain' ),
-			'singular_name' => _x( 'Post Type', 'post type singular name' , 'plugin_textdomain' ),
-			'add_new' => _x( 'Add New', $this->token , 'plugin_textdomain' ),
-			'add_new_item' => sprintf( __( 'Add New %s' , 'plugin_textdomain' ), __( 'Post' , 'plugin_textdomain' ) ),
-			'edit_item' => sprintf( __( 'Edit %s' , 'plugin_textdomain' ), __( 'Post' , 'plugin_textdomain' ) ),
-			'new_item' => sprintf( __( 'New %s' , 'plugin_textdomain' ), __( 'Post' , 'plugin_textdomain' ) ),
-			'all_items' => sprintf( __( 'All %s' , 'plugin_textdomain' ), __( 'Posts' , 'plugin_textdomain' ) ),
-			'view_item' => sprintf( __( 'View %s' , 'plugin_textdomain' ), __( 'Post' , 'plugin_textdomain' ) ),
-			'search_items' => sprintf( __( 'Search %a' , 'plugin_textdomain' ), __( 'Posts' , 'plugin_textdomain' ) ),
-			'not_found' =>  sprintf( __( 'No %s Found' , 'plugin_textdomain' ), __( 'Posts' , 'plugin_textdomain' ) ),
-			'not_found_in_trash' => sprintf( __( 'No %s Found In Trash' , 'plugin_textdomain' ), __( 'Posts' , 'plugin_textdomain' ) ),
-			'parent_item_colon' => '',
-			'menu_name' => __( '*Posts' , 'plugin_textdomain' )
-		);
-
-		$args = array(
-			'labels' => $labels,
-			'public' => true,
-			'publicly_queryable' => true,
-			'exclude_from_search' => true,
-			'show_ui' => true,
-			'show_in_menu' => true,
-			'show_in_nav_menus' => true,
-			'query_var' => false,
-			'rewrite' => true,
-			'capability_type' => 'post',
-			'has_archive' => true,
-			'hierarchical' => true,
-			'supports' => array( 'title' , 'editor' , 'excerpt' , 'comments' ),
-			'menu_position' => 5,
-			'menu_icon' => ''
-		);
-
-		register_post_type( $this->token, $args );
-	}
-
-	/**
-	 * Register new taxonomy
-	 * @return void
-	 */
-	public function register_taxonomy() {
-
-        $labels = array(
-            'name' => __( 'Terms' , 'plugin_textdomain' ),
-            'singular_name' => __( 'Term', 'plugin_textdomain' ),
-            'search_items' =>  __( 'Search Terms' , 'plugin_textdomain' ),
-            'all_items' => __( 'All Terms' , 'plugin_textdomain' ),
-            'parent_item' => __( 'Parent Term' , 'plugin_textdomain' ),
-            'parent_item_colon' => __( 'Parent Term:' , 'plugin_textdomain' ),
-            'edit_item' => __( 'Edit Term' , 'plugin_textdomain' ),
-            'update_item' => __( 'Update Term' , 'plugin_textdomain' ),
-            'add_new_item' => __( 'Add New Term' , 'plugin_textdomain' ),
-            'new_item_name' => __( 'New Term Name' , 'plugin_textdomain' ),
-            'menu_name' => __( 'Terms' , 'plugin_textdomain' ),
-        );
-
-        $args = array(
-            'public' => true,
-            'hierarchical' => true,
-            'rewrite' => true,
-            'labels' => $labels
-        );
-
-        register_taxonomy( 'post_type_terms' , $this->token , $args );
-    }
-
-    /**
-     * Regsiter column headings for post type
-     * @param  array $defaults Default columns
-     * @return array           Modified columns
-     */
-    public function register_custom_column_headings( $defaults ) {
-		$new_columns = array(
-			'custom-field' => __( 'Custom Field' , 'plugin_textdomain' )
-		);
-
-		$last_item = '';
-
-		if ( isset( $defaults['date'] ) ) { unset( $defaults['date'] ); }
-
-		if ( count( $defaults ) > 2 ) {
-			$last_item = array_slice( $defaults, -1 );
-
-			array_pop( $defaults );
-		}
-		$defaults = array_merge( $defaults, $new_columns );
-
-		if ( $last_item != '' ) {
-			foreach ( $last_item as $k => $v ) {
-				$defaults[$k] = $v;
-				break;
-			}
-		}
-
-		return $defaults;
-	}
+	
 
 	/**
 	 * Load data for post type columns

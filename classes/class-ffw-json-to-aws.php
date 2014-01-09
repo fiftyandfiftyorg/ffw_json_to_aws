@@ -2,15 +2,15 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WordPress_Plugin_Template {
+class FFW_JSON_TO_AWS {
 	private $dir;
 	private $file;
 	private $assets_dir;
 	private $assets_url;
 
 	public function __construct( $file ) {
-		$this->file = $file;
-		$this->dir = dirname( $this->file );
+		$this->file       = $file;
+		$this->dir        = dirname( $this->file );
 		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->file ) ) );
 

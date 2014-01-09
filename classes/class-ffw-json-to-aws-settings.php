@@ -2,15 +2,15 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WordPress_Plugin_Template_Settings {
+class FFW_JSON_TO_AWS_Settings {
 	private $dir;
 	private $file;
 	private $assets_dir;
 	private $assets_url;
 
 	public function __construct( $file ) {
-		$this->file = $file;
-		$this->dir = dirname( $this->file );
+		$this->file       = $file;
+		$this->dir        = dirname( $this->file );
 		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->file ) ) );
 
@@ -29,7 +29,7 @@ class WordPress_Plugin_Template_Settings {
 	 * @return void
 	 */
 	public function add_menu_item() {
-		add_options_page( 'Plugin Settings' , 'Plugin Settings' , 'manage_options' , 'plugin_settings' ,  array( $this, 'settings_page' ) );
+		add_options_page( 'FFW Export JSON' , 'FFW Export JSON' , 'manage_options' , 'plugin_settings' ,  array( $this, 'settings_page' ) );
 	}
 
 	/**
